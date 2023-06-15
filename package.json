@@ -1,0 +1,23 @@
+{
+  "name": "yii2ecommerce",
+  "version": "1.0.0",
+  "description": "<p align=\"center\">\r <<<<<<< HEAD\r     <a href=\"https://github.com/yiisoft\" target=\"_blank\">\r         <img src=\"https://avatars0.githubusercontent.com/u/993323\" height=\"100px\">\r     </a>\r     <h1 align=\"center\">Yii 2 Advanced Project Template</h1>\r     <br>\r </p>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite build --watch",
+    "build": "vite build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "vue": "^3.2.36",
+    "vue3-toastify": "^0.1.11"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "typescript": "^5.1.3",
+    "vite": "^4.3.9"
+  }
+}
