@@ -72,30 +72,17 @@ class Helper
         Yii::$app->view->registerJs($js, View::POS_END);
         Yii::$app->view->registerJsFile(Url::base(true) . '/js/apps/' . $name . '.js', ['type' => 'module']);
     }
-    public static function renderTable($headers, $data)
+
+    public static function jsVars()
     {
-        $table = '<table>';
-        $table .= '<thead><tr>';
+        $isGuest = Json::encode(Yii::$app->user->isGuest);
+        $loginUrl = Json::encode(Url::to(['/site/login']));
+        $js = <<<JS
+        window.jsVars = window.jsVars || {}
+        window.jsVars.isGuest = {$isGuest};
+        window.jsVars.loginUrl = {$loginUrl};
+    JS;
 
-        foreach ($headers as $header) {
-            $table .= '<th>' . $header . '</th>';
-        }
-
-        $table .= '</tr></thead>';
-        $table .= '<tbody>';
-
-        foreach ($data as $item) {
-            $table .= '<tr>';
-
-            foreach ($headers as $header) {
-                $table .= '<td>' . $item[$header] . '</td>';
-            }
-
-            $table .= '</tr>';
-        }
-
-        $table .= '</tbody></table>';
-
-        return $table;
+        Yii::$app->view->registerJs($js, View::POS_HEAD);
     }
 }

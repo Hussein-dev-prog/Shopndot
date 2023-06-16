@@ -42,22 +42,21 @@ $this->title = 'Shop n Dot';
     }
 </style>
 
-
 <section class="py-1">
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-4 row-cols-xl-4 justify-content-center">
-
             <?php if (!empty($products)) : ?>
                 <?php foreach ($products as $product) : ?>
                     <?php
                     $componentId = 'product#product' . $product->id;
                     Helper::vue($componentId, ['product' => $product]);
+                    Helper::jsVars();
                     ?>
-
                 <?php endforeach; ?>
             <?php else : ?>
                 <p class="text-muted text-center">This shop has no products yet</p>
             <?php endif; ?>
+            <?php ?>
         </div>
     </div>
 </section>

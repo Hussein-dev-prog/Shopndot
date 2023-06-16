@@ -91,17 +91,22 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, defineComponent, watchEffect } from "vue";
 import axios from "axios";
 import { defineProps } from "vue";
 import { toast, type ToastOptions } from "vue3-toastify";
+import { isAuth, isGuest, loginUrl } from "../../lib/functions";
 type Props = {
   product: any;
 };
 const props = defineProps<Props>();
 const qty = ref<number>(1);
-const notify = () => {};
+
 const addToWishList = (productId: number) => {
+  if (isGuest()) {
+    document.location.href = loginUrl();
+    return;
+  }
   axios
     .post(
       "http://customer-shopndot.test/index.php?r=wishlist/additem",
@@ -138,6 +143,10 @@ const addToWishList = (productId: number) => {
     });
 };
 const addToCart = (productId: number, quantity: number) => {
+  if (isGuest()) {
+    document.location.href = loginUrl();
+    return;
+  }
   axios
     .post(
       "http://customer-shopndot.test/index.php?r=cart/addtocart",
