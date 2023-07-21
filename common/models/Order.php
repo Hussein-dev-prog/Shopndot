@@ -81,4 +81,26 @@ class Order extends \yii\db\ActiveRecord
     {
         return $this->hasOne(OrderStatus::class, ['id' => 'orderStatusId']);
     }
+
+    public function fields()
+    {
+        $list = parent::fields();
+
+        $list['statusLabel'] = function () {
+            return $this->orderStatus ? $this->orderStatus->getName() : 'N/A';
+        };
+
+        $list['statusColor'] = function () {
+            return $this->orderStatus ? $this->orderStatus->getColor() : '#fff';
+        };
+
+        return $list;
+    }
+
+    function extraFields()
+    {
+        return ['customer', 'items' => function () {
+            return $this->orderItems;
+        }];
+    }
 }

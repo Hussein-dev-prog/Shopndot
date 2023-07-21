@@ -14,6 +14,10 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-supplier',
+            // 'parsers' => [
+            //     'application/json' => 'yii\web\JsonParser',
+            // ],
+
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -36,14 +40,19 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            'enableStrictParsing' => false,
             'rules' => [
+                'GET orders/<supplierId:\d+>' => '/panel/data',
+                'GET orders/details/<id:\d+>' => '/order/details',
+                'GET orders' => '/order/index',
+                'POST orders' => '/order/create',
+                'PUT orders/<id:\d+>' => '/order/update',
+                'DELETE orders/<id:\d+>' => '/order/delete',
             ],
         ],
-        */
     ],
     'params' => $params,
 ];

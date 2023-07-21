@@ -61,7 +61,6 @@ class Helper
         }
         $args = Json::encode($params);
         echo Html::tag('div', '', ['id' => $id]);
-
         $js = <<< JS
         window.addEventListener("DOMContentLoaded", (event) => {
 
@@ -82,7 +81,6 @@ class Helper
         window.jsVars.isGuest = {$isGuest};
         window.jsVars.loginUrl = {$loginUrl};
     JS;
-
         Yii::$app->view->registerJs($js, View::POS_HEAD);
     }
 }

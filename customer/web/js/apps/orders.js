@@ -1,0 +1,1 @@
+import{d as o,o as r,c as n,t,n as s}from"./app.js";const c={style:{"background-color":"red"}},a=o({name:"orders",props:{order:null},setup(e){return(d,p)=>(r(),n("div",c,t(e.order.city),1))}});s("orders",a);

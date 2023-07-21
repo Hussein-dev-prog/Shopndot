@@ -4,6 +4,7 @@ namespace supplier\controllers;
 
 use Yii;
 use yii\db\Expression;
+use yii\rest\ActiveController;
 
 use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
@@ -15,73 +16,59 @@ use common\models\Order;
 use common\models\OrderStatus;
 use common\models\OrderItem;
 use common\models\Product;
-use yii\web\Controller;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
 use yii\data\Pagination;
+use yii\web\Controller;
 
 class OrderController extends Controller
 {
+    // public $modelClass = 'common\models\Order';
 
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::class,
-                'rules' => [
-                    [
-                        'actions' => ['index', 'view', 'update', 'create', 'delete', 'update-status', 'details'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+    // public function actions()
+    // {
+    //     $actions = parent::actions();
+    //     unset($actions['index']);
+    //     return $actions;
+    // }
     public function actionIndex()
     {
-        $orders = Order::find()
-            ->leftJoin('order_items', 'order_items.order_id = orders.id')
-            ->andWhere(new Expression('JSON_EXTRACT(JSON_UNQUOTE(product_details), "$.supplier_id") = :supplierId', [':supplierId' => Yii::$app->user->identity->id]));
-        $pagination = new Pagination([
-            'defaultPageSize' => 5, // Number of items per page
-            'totalCount' => $orders->count(),
-        ]);
-        $orders = $orders->orderBy(['created_at' => SORT_DESC])
-        ->offset($pagination->offset)
-        ->limit($pagination->limit)
-        ->all();
-    
-        if ($orders) {
-            $orderStatusNames = [];
-            $orderStatusColors = [];
-            $customerNames = [];
-
-            foreach ($orders as $order) {
-                $orderStatus = $order->orderStatus;
-                $orderStatusNames[] = $orderStatus ? $orderStatus->getName() : 'N/A';
-                $orderStatusColors[] = $orderStatus ? $orderStatus->getColor() : 'black';
-                $customerNames[] = $order->customer->firstname . "  " . $order->customer->lastname;
-            }
-
-            return $this->render('index', [
-                'orders' => $orders,
-                'orderStatusNames' => $orderStatusNames,
-                'orderStatusColors' => $orderStatusColors,
-                'customerNames' => $customerNames,
-                'pagination' => $pagination,
-
-            ]);
-        } else {
-            return '';
-        }
+        // $actions = parent::actions();
+        // unset($actions['index']);
+        return $this->render('index');
     }
+    // public function behaviors()
+    // {
+    //     $behaviors = parent::behaviors();
+
+    //     // Override the content negotiation behavior to always return JSON
+    //     $behaviors['contentNegotiator']['formats'] = [
+    //         'application/json' => Response::FORMAT_JSON,
+    //     ];
+
+    //     return $behaviors;
+    // }
+    // public function behaviors()
+    // {
+    //     return [
+    //         'access' => [
+    //             'class' => AccessControl::class,
+    //             'rules' => [
+    //                 [
+    //                     'actions' => ['index', 'view', 'update', 'create', 'delete', 'update-status', 'details'],
+    //                     'allow' => true,
+    //                     'roles' => ['@'],
+    //                 ],
+    //             ],
+    //         ],
+    //         'verbs' => [
+    //             'class' => VerbFilter::class,
+    //             'actions' => [
+    //                 'delete' => ['POST'],
+    //             ],
+    //         ],
+    //     ];
+    // }
 
 
     // ...
@@ -91,8 +78,7 @@ class OrderController extends Controller
         $query = OrderItem::find()
             ->leftJoin('orders', 'order_items.order_id = orders.id')
             ->where(['orders.id' => $id]);
-        // echo  $query->createCommand()->getRawSql();
-        // exit;
+
         $orderItems = $query->all();
         foreach ($orderItems as $orderItem) {
             $products[] =  $orderItem->product_details;
@@ -125,7 +111,7 @@ class OrderController extends Controller
             $product->save();
             $order->orderStatusId = 4;
             if ($order->save()) {
-                return ['status' => 'success', 'message' => 'Order Rejected', 'color' => $order->orderStatus->color, 'name' => $order->orderStatus->name];
+                return ['status' => 'success', 'message' => 'Order Rejected', 'color' => $order->orderStatus->color, 'name' => $order->orderStatus->name, 'orderStatusId' => $order->orderStatusId];
             } else {
                 return ['status' => 'error', 'message' => 'Error rejecting the order'];
             }
